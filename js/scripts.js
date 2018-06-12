@@ -64,8 +64,8 @@ const submitButton = document.querySelector('button');
  *-------------------------------------------------|
  */
 // a not-so-dry solution but i really didnt want to start makig reduce and append elements. so yea :P
-document.getElementsByTagName('body')[0].addEventListener("click", event =>{validateAllTheThings()});
-
+document.getElementsByTagName('body')[0].addEventListener("mouseout", event =>{validateAllTheThings()});
+window.onSubmit=validateAllTheThings;
 titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
 		if (event.target.value === "other"){
 			textArea.style.display="";
