@@ -301,8 +301,6 @@ function onLoad(){
 	paymentSettings();
 	hideElement(colorMenu.parentNode);
 	totalCostElement();
-}
-onLoad();
-
-
+	disableSubmit();
+} onLoad();
 
