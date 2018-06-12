@@ -1,0 +1,47 @@
+
+
+
+for test 1:
+
+know how to set focus on page load
+
+for test 2:
+
+know how to make drop down menus. and make an event listener simulation in 
+a unit test enviroment
+
+for test 3:
+
+know how to make checkboxes, and a diabling functions that is called on all
+outher checkboxes beside the one clicked.
+
+for testing simple attr conditional testing
+
+test 4:
+
+know how to make a select menu, and display style attr manipulation on
+relevent divs, for testing, simple attr condotional checker.
+
+test 5:
+
+core condotional of the page, make a flow chart of logical outcomes and
+implament on element by element basis
+
+can be testd with element specific unit tests
+
+test 6:
+
+adding and removing elements of texts with styling. based of conditoinals in
+the core form conditionals, should be next to the relevent text fields ( DOM
+traversal )
+
+for testing: no unit testing for this, a simple try and repeat for each error
+message should suffice
+
+test 7:
+
+making a hard coded (html) form fieds, and only hide them with the js file
+
+another option is using css <--- a bit more intresting!
+
+for testing: to unit testing, do this part first!
