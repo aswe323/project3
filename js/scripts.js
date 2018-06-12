@@ -38,6 +38,7 @@
  *	TO REFACTOR:
  *		TODO:refactor the disableOther function to be more concise. (high order function?)
  * */
+
 //accessing neccesery elements
 const firstInput = document.querySelector('input');//first input element
 const titleSelect = document.getElementById('title');//job rule menu
@@ -64,8 +65,8 @@ const submitButton = document.querySelector('button');
  *-------------------------------------------------|
  */
 // a not-so-dry solution but i really didnt want to start makig reduce and append elements. so yea :P
-document.getElementsByTagName('body')[0].addEventListener("mouseout", event =>{validateAllTheThings()});
-window.onSubmit=validateAllTheThings;
+//document.getElementsByTagName('body')[0].addEventListener("focusout", event =>{validateAllTheThings()});
+
 titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
 		if (event.target.value === "other"){
 			textArea.style.display="";
@@ -135,87 +136,11 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *-------------------------------------------------|
  */
 
-//validator for extravaganius reasons
-function validateAllTheThings(){
-	console.log('i am working');
-	let enableSubmit = true;
-	let elementToCheck = null
-	console.log('happened');
-	//checking name field
-	elementToCheck = firstInput;
-	if (elementToCheck.value !== "" && isNaN(elementToCheck.value)){
-		console.log('a name was given');
-	}else if (elementToCheck.value !== "" && isNaN(elementToCheck.value)==false){
-		elementToCheck.placeholder = 'REQUIRED:name cant be a number'
-		elementToCheck.value="";
-		enableSubmit = false;
-	}else{
-		elementToCheck.placeholder = 'REQUIRED';
-		elementToCheck.value="";
-		enableSubmit = false;
-	};
-	//checking mail field
-	elementToCheck=document.querySelector('#mail');
-	if  (elementToCheck.value.includes('@') && elementToCheck.value.endsWith('.com')){
-		console.log('a valid email was given');
-	}else{
-		elementToCheck.placeholder = 'REQUIRED: a valid email address';
-		elementToCheck.value = "";
-		enableSubmit = false;
-	};
-	//checking if an activity was selected
-	elementToCheck=document.querySelector('.activities p');
-	if (elementToCheck.innerHTML!=='0' && elementToCheck.innerHTML!==""){
-		console.log('total cost is: ' + elementToCheck.innerHTML);
-	}else{
-		elementToCheck.innerHTML='please select an activitie';
-		enableSubmit = false;
-	}
-	//if credit card was selected then check for validity
-	if (paymentOptions.value =="credit card"){
-		//check for card number field
-		elementToCheck=document.querySelector('#cc-num');
-		if (elementToCheck.value==""){
-			elementToCheck.placeholder ="please enter a valid card";
-			elementToCheck.value = "";
-			enableSubmit = false;
-		}else if (isNaN(elementToCheck.value)){
-			elementToCheck.placeholder ="only numbers please";
-			elementToCheck.value = "";
-			enableSubmit = false;
-		}else if(elementToCheck.value.length > 16 || elementToCheck.value.length < 13){
-			elementToCheck.placeholder ="out of bounds";
-			elementToCheck.value = "";
-			enableSubmit = false;
-		}
-		//check for zip code for
-		elementToCheck=document.querySelector('#zip');
-		if (isNaN(elementToCheck.value)){
-			elementToCheck.placeholder="only numbers";
-			elementToCheck.value="";
-			enableSubmit = false;
-		}else if (elementToCheck.value.length !== 5){
-			elementToCheck.placeholder="5 numbers";
-			elementToCheck.value="";
-			enableSubmit = false;
-		}
-		//check for cvv field
-		elementToCheck=document.querySelector('#cvv');
-		if (isNaN(elementToCheck.value)){
-			elementToCheck.placeholder="only numebrs";
-			elementToCheck.value="";
-			enableSubmit = false;
-		}else if (elementToCheck.value.length !== 3 ){
-			elementToCheck.placeholder="3 numebrs";
-			elementToCheck.value="";
-			enableSubmit = false;
-		}
 
-	}else{}
-	isValid(enableSubmit)
-}
+
 //takes a true or false value, if true enable submit button if not do nothing
 function isValid (bool){
+	console.log(enableSubmit);
 	if (bool) { 
 		submitButton.removeAttribute('disabled' , 'true');
 		submitButton.style.color = "";
@@ -294,6 +219,7 @@ function disableSubmit (){
 	submitButton.style.color = "grey";
 }
 
+
 //wha will happen when the js is loaded
 function onLoad(){
 	setFocus();
@@ -303,5 +229,5 @@ function onLoad(){
 	hideElement(colorMenu.parentNode);
 	totalCostElement();
 	disableSubmit();
-} onLoad();
-
+}
+onLoad();
