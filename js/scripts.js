@@ -64,7 +64,79 @@ const submitButton = document.querySelector('button');
  *-------------------------------------------------|
  */
 // a not-so-dry solution but i really didnt want to start makig reduce and append elements. so yea :P
-document.getElementsByTagName('body')[0].addEventListener('focusout', event =>{// body event handeler for general validation
+document.getElementsByTagName('body')[0].addEventListener("click", event =>{validateAllTheThings()});
+
+titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
+		if (event.target.value === "other"){
+			textArea.style.display="";
+		}else{
+			textAreaHide();
+		}
+	}
+)
+
+var main = false;
+checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
+	const tNineToTwelve = [checkBoxes[1] , checkBoxes[3]];//arrey of checkbox elements, Tusday nine am to 12pm
+	const tOneToFour = [checkBoxes[2] , checkBoxes[4]];//arrey of checkboxes elements, tusday one pm to four pm
+	disableOther(event.target, tNineToTwelve);	
+	disableOther(event.target, tOneToFour);
+	//use a reduce function to check if the element is checked if true and pos 0 then add 200, else if true add 100, else, nothing;
+	let totalCost = Array.from(checkBoxes).reduce((costSum, box)=>{
+		if (box.checked && box == checkBoxes[0]){
+			costSum  = costSum + 200;
+		}else if (box.checked && box !== checkBoxes[0]){
+			costSum  = costSum + 100;
+		}		
+		return costSum;
+	}, 0)
+	//adding total cost to the inner html of the p element under the checkboxes
+	checkBoxForm.querySelector('p').innerHTML = totalCost;	
+	//WARNING: check specific wanted behavior in the site (disable checkboxes or change with out disableing)
+	//
+}
+)
+
+//event listener for the select menu in the payment option
+paymentOptions.addEventListener('change', event =>{
+	let indexValue=0;
+	let selected = paymentOptionsSelectables.forEach((x,index)=>{
+		if(x.value == event.target.value){indexValue = index};
+	});
+	if (indexValue === 0){return}else{};
+	paymentDivs.forEach(x=>hideElement(x));
+	paymentDivs.item(indexValue-1).style.display = '';
+	//show the selected div
+})
+
+designMenu.addEventListener('change', event =>{  //desgin event listener, updates the color menu on change,
+	if (designMenu.value == "Select Theme"){
+		hideElement(colorMenu.parentNode)
+
+	}else{
+		showElement(colorMenu.parentNode)
+	};
+	hideColors();
+	colorMenu.value = "";
+	if (event.target.value === 'js puns'){
+		colorMenu.children[0].style.display="";
+		colorMenu.children[1].style.display="";
+		colorMenu.children[2].style.display="";
+	}else if (event.target.value == 'heart js'){
+		colorMenu.children[3].style.display="";
+		colorMenu.children[4].style.display="";
+		colorMenu.children[5].style.display="";
+	}
+
+})
+
+/*-------------------------------------------------|
+ *              function that are used             |
+ *-------------------------------------------------|
+ */
+
+//validator for extravaganius reasons
+function validateAllTheThings(){
 	console.log('i am working');
 	let enableSubmit = true;
 	let elementToCheck = null
@@ -139,79 +211,9 @@ document.getElementsByTagName('body')[0].addEventListener('focusout', event =>{/
 			enableSubmit = false;
 		}
 
-	}
-	isValid(enableSubmit);
-	
-});
-
-titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
-		if (event.target.value === "other"){
-			textArea.style.display="";
-		}else{
-			textAreaHide();
-		}
-	}
-)
-
-var main = false;
-checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
-	const tNineToTwelve = [checkBoxes[1] , checkBoxes[3]];//arrey of checkbox elements, Tusday nine am to 12pm
-	const tOneToFour = [checkBoxes[2] , checkBoxes[4]];//arrey of checkboxes elements, tusday one pm to four pm
-	disableOther(event.target, tNineToTwelve);	
-	disableOther(event.target, tOneToFour);
-	//use a reduce function to check if the element is checked if true and pos 0 then add 200, else if true add 100, else, nothing;
-	let totalCost = Array.from(checkBoxes).reduce((costSum, box)=>{
-		if (box.checked && box == checkBoxes[0]){
-			costSum  = costSum + 200;
-		}else if (box.checked && box !== checkBoxes[0]){
-			costSum  = costSum + 100;
-		}		
-		return costSum;
-	}, 0)
-	//adding total cost to the inner html of the p element under the checkboxes
-	checkBoxForm.querySelector('p').innerHTML = totalCost;	
-	//WARNING: check specific wanted behavior in the site (disable checkboxes or change with out disableing)
-	//
+	}else{}
+	isValid(enableSubmit)
 }
-)
-
-//event listener for the select menu in the payment option
-paymentOptions.addEventListener('change', event =>{
-	let indexValue=0;
-	let selected = paymentOptionsSelectables.forEach((x,index)=>{
-		if(x.value == event.target.value){indexValue = index};
-	});
-	if (indexValue === 0){return}else{};
-	paymentDivs.forEach(x=>hideElement(x));
-	paymentDivs.item(indexValue-1).style.display = '';
-	//show the selected div
-})
-
-designMenu.addEventListener('change', event =>{  //desgin event listener, updates the color menu on change,
-	if (designMenu.value == "Select Theme"){
-		hideElement(colorMenu.parentNode)
-
-	}else{
-		showElement(colorMenu.parentNode)
-	};
-	hideColors();
-	colorMenu.value = "";
-	if (event.target.value === 'js puns'){
-		colorMenu.children[0].style.display="";
-		colorMenu.children[1].style.display="";
-		colorMenu.children[2].style.display="";
-	}else if (event.target.value == 'heart js'){
-		colorMenu.children[3].style.display="";
-		colorMenu.children[4].style.display="";
-		colorMenu.children[5].style.display="";
-	}
-
-})
-
-/*-------------------------------------------------|
- *              function that are used             |
- *-------------------------------------------------|
- */
 //takes a true or false value, if true enable submit button if not do nothing
 function isValid (bool){
 	if (bool) { 
