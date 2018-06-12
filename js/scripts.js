@@ -73,7 +73,6 @@ document.getElementsByTagName('body')[0].addEventListener('focusout', event =>{/
 	elementToCheck = firstInput;
 	if (elementToCheck.value !== "" && isNaN(elementToCheck.value)){
 		console.log('a name was given');
-		return
 	}else if (elementToCheck.value !== "" && isNaN(elementToCheck.value)==false){
 		elementToCheck.placeholder = 'REQUIRED:name cant be a number'
 		elementToCheck.value="";
