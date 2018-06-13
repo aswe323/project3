@@ -68,7 +68,7 @@ const submitButton = document.querySelector('button');
 
 // a variable that will hold the event.taget of an event listener, every keydown
 var keyTarget = document.addEventListener('keyup', (event)=>validation(event.target));
-
+//a 
 
 titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
 		if (event.target.value === "other"){
@@ -238,8 +238,9 @@ function validation(keyTarget){
 				keyTarget.placeholder="numbers";
 				hideElement(submitButton);
 				return
-			}else if (keyTarget.value.length !== 3){
-				keydown.placeholder="invalid";
+			}else if (keyTarget.value.length < 3||keyTarget.value.length > 3){
+				console.log('NotInRange');
+				keyTarget.placeholder="invalid";
 				hideElement(submitButton);
 				return
 			}else{
