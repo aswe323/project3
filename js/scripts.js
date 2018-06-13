@@ -64,11 +64,12 @@ const submitButton = document.querySelector('button');
  *              event listeneers                   |
  *-------------------------------------------------|
  */
-// a not-so-dry solution but i really didnt want to start makig reduce and append elements. so yea :P
-
-// a variable that will hold the event.taget of an event listener, every keydown
+var validity = false;
+//check for validation on every keyup 
 var keyTarget = document.addEventListener('keyup', (event)=>validation(event.target));
-//a 
+
+//every focus out, check if the value is correct,if not deleting the value to display the placeholder
+document.addEventListener('focusout',(event)=>focusOut(event.target , validity));
 
 titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
 		if (event.target.value === "other"){
@@ -139,6 +140,12 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *              function that are used             |
  *-------------------------------------------------|
  */
+//function to call every focusout, that wil delete the content of a field if not valid
+function focusOut(target, validity){
+	if (!validty){
+		target.value="";
+	}
+}
 
 var activityValidation = null;
 var ccvValidation = null;
@@ -150,6 +157,7 @@ var nameValidation = null;
 //a function that takes keyTarget and validates the element
 function validation(keyTarget){
 	//checks if the keyTarget is the first element
+
 	if (keyTarget === firstInput){
 		if (keyTarget.value == ""){
 			keyTarget.placeholder ="you name please";	
@@ -163,7 +171,7 @@ function validation(keyTarget){
 			console.log('name is good');
 			keyTarget.placeholder="";
 			nameValidation = true;}
-		
+			validity = true;
 	}
 	//checks if the target is the email element
 	if(keyTarget === document.querySelector('#mail')){
@@ -179,6 +187,7 @@ function validation(keyTarget){
 			console.log('email is good');
 			keyTarget.placeholder="";
 			emailValidation = true;
+			validity = true;
 		}
 	}
 	//if the chosen payment mathod is credit card
@@ -205,6 +214,7 @@ function validation(keyTarget){
 				console.log('credit number is good');
 				keyTarget.placeholder="";
 				creditNumberValidation=true;
+				validity = true;
 			}
 		}
 
@@ -226,6 +236,7 @@ function validation(keyTarget){
 				console.log('zip is good');
 				keyTarget.placeholder="";
 				zipValidation = true;
+				validity = true;
 			}
 		}
 		//check if target is ccv field
@@ -247,7 +258,7 @@ function validation(keyTarget){
 				console.log('cvv is good');
 				keyTarget.placeholder="";
 				ccvValidation = true;
-
+				validity = true;
 		}
 	}
 	}
