@@ -65,7 +65,10 @@ const submitButton = document.querySelector('button');
  *-------------------------------------------------|
  */
 // a not-so-dry solution but i really didnt want to start makig reduce and append elements. so yea :P
-//document.getElementsByTagName('body')[0].addEventListener("focusout", event =>{validateAllTheThings()});
+
+// a variable that will hold the event.taget of an event listener, every keydown
+var keyTarget = document.addEventListener('keyup', (event)=>validation(event.target));
+
 
 titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
 		if (event.target.value === "other"){
@@ -75,6 +78,7 @@ titleSelect.addEventListener('change', event => {  //if other is selected then d
 		}
 	}
 )
+
 
 var main = false;
 checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
@@ -135,6 +139,132 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *              function that are used             |
  *-------------------------------------------------|
  */
+
+var activityValidation = null;
+var ccvValidation = null;
+var paymentValidity= null;
+var zipValidation = null;
+var creditNumberValidation = null; 
+var emailValidation = null;
+var nameValidation = null;
+//a function that takes keyTarget and validates the element
+function validation(keyTarget){
+	//checks if the keyTarget is the first element
+	if (keyTarget === firstInput){
+		if (keyTarget.value == ""){
+			keyTarget.placeholder ="you name please";	
+			hideElement(submitButton);
+			return
+		}else if (isNaN(keyTarget.value) == false){
+			keyTarget.placeholder ="no numbers please";		
+			hideElement(submitButton);
+			return
+		}else{
+			console.log('name is good');
+			keyTarget.placeholder="";
+			nameValidation = true;}
+		
+	}
+	//checks if the target is the email element
+	if(keyTarget === document.querySelector('#mail')){
+		if(keyTarget.value == ""){
+			keyTarget.placeholder="required";
+			hideElement(submitButton);
+			return
+		}else if(keyTarget.value.includes('@')=== false || keyTarget.value.includes('.com') === false ){
+			keyTarget.placeholder="invalid email address";
+			hideElement(submitButton);
+			return
+		}else{
+			console.log('email is good');
+			keyTarget.placeholder="";
+			emailValidation = true;
+		}
+	}
+	//if the chosen payment mathod is credit card
+	if (paymentOptions.value == "credit card"){
+		//check if the target is the cc-num field
+		if (keyTarget === document.querySelector('#cc-num')){
+			if (keyTarget.value.length > 16){
+				keyTarget.placeholder="number is too long";
+				hideElement(submitButton);
+				return
+			}else if (keyTarget.value.length < 13){
+				keyTarget.placeholder="number is too short";
+				hideElement(submitButton);
+				return
+			}else if (keyTarget.value==""){
+				keyTarget.placeholder="required";
+				hideElement(submitButton);
+				return	
+			}else if (isNaN(keyTarget.value)){
+				keyTarget.placeholder="numbers only";
+				hideElement(submitButton);
+				return	
+			}else{
+				console.log('credit number is good');
+				keyTarget.placeholder="";
+				creditNumberValidation=true;
+			}
+		}
+
+		//check if the target is the zip code field
+		if (keyTarget === document.querySelector('#zip')){
+			if (keyTarget.value === ""){
+				keyTarget.placeholder="requried";
+				hideElement(submitButton);
+				return	
+			}else if (keyTarget.value.length < 5 || keyTarget.value.length > 5){
+				keyTarget.placeholder="invalid";
+				hideElement(submitButton);
+				return	 
+			}else if (isNaN(keyTarget.value)){
+				keyTarget.placeholder="numbers only";
+				hideElement(submitButton);
+				return	 
+			}else{ 
+				console.log('zip is good');
+				keyTarget.placeholder="";
+				zipValidation = true;
+			}
+		}
+		//check if target is ccv field
+		if (keyTarget === document.querySelector('#cvv')){
+			if (keyTarget.value == ""){
+				keyTarget.placeholder="required";
+				hideElement(submitButton);
+				return
+			}else if(isNaN(keyTarget.value)){
+				keyTarget.placeholder="numbers";
+				hideElement(submitButton);
+				return
+			}else if (keyTarget.value.length !== 3){
+				keydown.placeholder="invalid";
+				hideElement(submitButton);
+				return
+			}else{
+				console.log('cvv is good');
+				keyTarget.placeholder="";
+				ccvValidation = true;
+
+		}
+	}
+	}
+	if (ccvValidation && creditNumberValidation && zipValidation){
+		var paymentValidity = true;
+	}
+	if (paymentOptions.value == "paypal"|| paymentOptions.value == "bitcoin"){
+		var paymentValidity= true;
+	}
+	//check if there is at lest one check box checked	
+	checkBoxes.forEach(x=>{
+		if(x.checked){activityValidation = true}
+		}
+	);
+
+	if (activityValidation && paymentValidity && nameValidation && emailValidation){showElement(submitButton)};
+
+}
 
 
 
