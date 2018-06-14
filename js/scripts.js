@@ -64,12 +64,12 @@ const submitButton = document.querySelector('button');
  *              event listeneers                   |
  *-------------------------------------------------|
  */
-var validity = false;
+var val= false;
 //check for validation on every keyup 
 var keyTarget = document.addEventListener('keyup', (event)=>validation(event.target));
 
 //every focus out, check if the value is correct,if not deleting the value to display the placeholder
-document.addEventListener('focusout',(event)=>focusOut(event.target , validity));
+window.addEventListener('focusout',(event)=>focusOut(event.target ,val));
 
 titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
 		if (event.target.value === "other"){
@@ -141,9 +141,12 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *-------------------------------------------------|
  */
 //function to call every focusout, that wil delete the content of a field if not valid
-function focusOut(target, validity){
-	if (!validty){
+function focusOut(target, val){
+	if (val===false){
 		target.value="";
+		submitButton.setAttribute('disabled','true');
+	}else if (val === true){
+		submitButton.removeAttribute('disabled','true');
 	}
 }
 
@@ -156,8 +159,8 @@ var emailValidation = null;
 var nameValidation = null;
 //a function that takes keyTarget and validates the element
 function validation(keyTarget){
+	val = false
 	//checks if the keyTarget is the first element
-
 	if (keyTarget === firstInput){
 		if (keyTarget.value == ""){
 			keyTarget.placeholder ="you name please";	
@@ -171,7 +174,7 @@ function validation(keyTarget){
 			console.log('name is good');
 			keyTarget.placeholder="";
 			nameValidation = true;}
-			validity = true;
+			val= true;
 	}
 	//checks if the target is the email element
 	if(keyTarget === document.querySelector('#mail')){
@@ -187,7 +190,7 @@ function validation(keyTarget){
 			console.log('email is good');
 			keyTarget.placeholder="";
 			emailValidation = true;
-			validity = true;
+			val= true;
 		}
 	}
 	//if the chosen payment mathod is credit card
@@ -214,7 +217,7 @@ function validation(keyTarget){
 				console.log('credit number is good');
 				keyTarget.placeholder="";
 				creditNumberValidation=true;
-				validity = true;
+				val= true;
 			}
 		}
 
@@ -236,7 +239,7 @@ function validation(keyTarget){
 				console.log('zip is good');
 				keyTarget.placeholder="";
 				zipValidation = true;
-				validity = true;
+				val= true;
 			}
 		}
 		//check if target is ccv field
@@ -258,7 +261,7 @@ function validation(keyTarget){
 				console.log('cvv is good');
 				keyTarget.placeholder="";
 				ccvValidation = true;
-				validity = true;
+				val= true;
 		}
 	}
 	}
@@ -280,17 +283,7 @@ function validation(keyTarget){
 
 
 
-//takes a true or false value, if true enable submit button if not do nothing
-function isValid (bool){
-	console.log(enableSubmit);
-	if (bool) { 
-		submitButton.removeAttribute('disabled' , 'true');
-		submitButton.style.color = "";
-	}else{
-		disableSubmit();
-	}
 
-}
 
 //cost of activities
 function totalCostElement(){
@@ -355,12 +348,6 @@ function textAreaHide(){
 	textArea.style.display="none";
 }
 
-//fucntion that disables the submit buttona nd set its color to grey
-function disableSubmit (){
-	submitButton.setAttribute('disabled', 'true');
-	submitButton.style.color = "grey";
-}
-
 
 //wha will happen when the js is loaded
 function onLoad(){
@@ -370,6 +357,7 @@ function onLoad(){
 	paymentSettings();
 	hideElement(colorMenu.parentNode);
 	totalCostElement();
-	disableSubmit();
+	hideElement(submitButton);
+	submitButton.setAttribute('disabled',"true");
 }
 onLoad();
