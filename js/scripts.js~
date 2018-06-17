@@ -142,13 +142,14 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  */
 //function to call every focusout, that wil delete the content of a field if not valid
 function focusOut(target, val){
-	if (target === querySelectorAll('select'){return};
+	if (Array.from(document.querySelectorAll('select')).includes(target)){return console.log('test')};//<<<<<<<<<<<<<------------------ what needs to happen. UNTESTED
 	if (val===false){
 		target.value="";
 		submitButton.setAttribute('disabled','true');
 	}else if (val === true){
 		submitButton.removeAttribute('disabled','true');
 	}
+	if (activityValidation && paymentValidity && nameValidation && emailValidation){showElement(submitButton)};
 }
 
 var activityValidation = null;
