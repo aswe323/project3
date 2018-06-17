@@ -22,7 +22,6 @@ const zipField = document.querySelector('#zip'); // zip field
 const creditCardNumeberField = document.querySelector('#cc-num'); //credit card number field
 const nameField = document.querySelector('#name');//name input field 
 const emailField = document.querySelector('#mail'); // mail input field
-const titleSelect = document.getElementById('title');// job rule menu
 const textArea = document.querySelector("#other-title");//text area below job rule menu
 //design menu acceses
 const designMenu = document.querySelector("#design");// design style menu
@@ -31,8 +30,6 @@ const colorMenu = document.querySelector("#color"); // color menu
 const checkBoxes = document.querySelectorAll('.activities input');
 //activities form
 const checkBoxForm =document.querySelector('.activities');
-//labels of check boxes
-const checkBoxLabels = document.querySelectorAll(".activities label");
 //acces to the payment options menu
 const paymentOptions = document.querySelector("#payment");
 const paymentOptionsSelectables = paymentOptions.querySelectorAll('option');
@@ -48,7 +45,6 @@ const submitButton = document.querySelector('button');
  *-------------------------------------------------|
 */
 
-var val= false;
 var activityValidation = null;
 var ccvValidation = null;
 var paymentValidity= null;
@@ -195,13 +191,11 @@ cvvField.addEventListener('keyup', (event)=>{ // cvv number field
 
 cvvField.addEventListener('focusout', event=>verifier(event.target, zipValidation));
 
-var main = false;
 checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
 	const tNineToTwelve = [checkBoxes[1] , checkBoxes[3]];//arrey of checkbox elements, Tusday nine am to 12pm
 	const tOneToFour = [checkBoxes[2] , checkBoxes[4]];//arrey of checkboxes elements, tusday one pm to four pm
 	disableOther(event.target, tNineToTwelve);	
 	disableOther(event.target, tOneToFour);
-	//use a reduce function to check if the element is checked if true and pos 0 then add 200, else if true add 100, else, nothing;
 	let totalCost = Array.from(checkBoxes).reduce((costSum, box)=>{
 		if (box.checked && box == checkBoxes[0]){
 			costSum  = costSum + 200;
@@ -212,13 +206,10 @@ checkBoxForm.addEventListener('change', event =>{  //event listener for specific
 	}, 0)
 	//adding total cost to the inner html of the p element under the checkboxes
 	checkBoxForm.querySelector('p').innerHTML = totalCost;	
-	//WARNING: check specific wanted behavior in the site (disable checkboxes or change with out disableing)
-	//
 }
 )
 
-//event listener for the select menu in the payment option
-paymentOptions.addEventListener('change', event =>{
+paymentOptions.addEventListener('change', event =>{ //event listener for the select menu in the payment option
 	let indexValue=0;
 	let selected = paymentOptionsSelectables.forEach((x,index)=>{
 		if(x.value == event.target.value){indexValue = index};
@@ -254,29 +245,23 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *              function that are used             |
  *-------------------------------------------------|
  */
-//function to call every focusout, that wil delete the content of a field if its approproate variable is no true 
-function verifier(target, val){
+function verifier(target, val){ //function to call every focusout, that wil delete the content of a field if its approproate variable is no true 
 	if (val!==true){
 		target.value="";
 	}
 }
-function isSubmitable(){
-	console.log('was called');
+function isSubmitable(){ //checking if the user input is valid.
 	if (paymentOptions.value ==="credit card"){creditCardValidity()};
-	console.log(activityValidation , paymentValidity , nameValidation , emailValidation);
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){
-		console.log('enabling');
 		showElement(submitButton)
 		enableSubmit();	
 	}else{
-		console.log('disabling');	
 		disableSubmit;
 		hideElement(submitButton);	
 	}
 
 }
-// credit card validation
-function creditCardValidity (){
+function creditCardValidity (){ // credit card fields validation
 	paymentValidity = false;
 	console.log(ccvValidation , creditNumberValidation , zipValidation);
 	if (ccvValidation && creditNumberValidation && zipValidation){
@@ -286,8 +271,7 @@ function creditCardValidity (){
 
 
 
-//cost of activities
-function totalCostElement(){
+function totalCostElement(){ //adding a p element to the checkbox form
 //create a p element and add it to the end of the activities field
 	const sumElement = document.createElement('p');
 	checkBoxForm.appendChild(sumElement);
@@ -295,8 +279,7 @@ function totalCostElement(){
 
 
 
-//toggle function for disabled and enabled groups of two elements
-function disableOther (checkbox, arrey){
+function disableOther (checkbox, arrey){ //toggle function for disabled and enabled groups of two elements
 	//if the check box is disabled then enable it
 	if(arrey.includes(checkbox)){}else{return};
 	if (arrey[1].hasAttribute('disabled', 'true')|| arrey[0].hasAttribute('disabled', 'true')){
@@ -314,8 +297,7 @@ function disableOther (checkbox, arrey){
 	}	
 }
 
-//on start settings for pamet options
-function paymentSettings (){
+function paymentSettings (){//on start settings for payment options
 	paymentOptionsSelectables[0].remove();
 	paymentOptions.value ="credit card";
 	//hide all divs then show creditcard div
