@@ -230,12 +230,12 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
 		colorMenu.children[0].style.display="";
 		colorMenu.children[1].style.display="";
 		colorMenu.children[2].style.display="";
-		colorMenu.value = 'gold';
+		colorMenu.value = 'cornflowerblue';
 	}else if (event.target.value == 'heart js'){
 		colorMenu.children[3].style.display="";
 		colorMenu.children[4].style.display="";
 		colorMenu.children[5].style.display="";
-		colorMenu.value = colorMenu.children[3];
+		colorMenu.value = 'dimgrey';
 	}
 
 })

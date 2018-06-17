@@ -1,5 +1,8 @@
 /*
  * TO-ADD:
+ * 	TODO: make a functin that will get an error string, an element, and  a true or false value
+ * 	, if true will make a new p element ABOVE the given element with the string
+ *	if false will remove the p element.
  *	TODO: make individuale event listeners for each relevent element :(
  *		1.use keyup for input fields
  *		2. use change for select menus
@@ -301,6 +304,9 @@ function paymentSettings (){//on start settings for payment options
 	paymentDivs.forEach((x)=>hideElement(x));
 	showElement(creditCardDiv);
 }
+
+//error element handeling
+function errorHandler(str, elementPosition:w
 
 
 //hiding a given element.
