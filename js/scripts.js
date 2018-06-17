@@ -142,6 +142,7 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  */
 //function to call every focusout, that wil delete the content of a field if not valid
 function focusOut(target, val){
+	if (target === querySelectorAll('select'){return};//<<<<<<<<<<<<<------------------ what needs to happen. UNTESTED
 	if (val===false){
 		target.value="";
 		submitButton.setAttribute('disabled','true');
