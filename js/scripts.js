@@ -63,11 +63,9 @@ nameField.addEventListener('keyup' , (event) =>{ //name field validation on ever
 		nameValidation = false;
 		if (event.target.value == ""){
 			event.target.placeholder = "your name please";	
-			hideElement(submitButton);
 			return isSubmitable()
 		}else if (isNaN(event.target.value) === false){
 			event.target.placeholder ="no numbers please";		
-			hideElement(submitButton);
 			return isSubmitable()
 		}else{
 			event.target.placeholder="";
@@ -82,11 +80,11 @@ emailField.addEventListener('keyup', (event) =>{ //mail field validation on ever
 	emailValidation = false;
 	if(event.target.value == ""){
 		event.target.placeholder="required";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
 		event.target.placeholder="invalid email address";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else{
 		event.target.placeholder="";
@@ -120,19 +118,19 @@ creditCardNumeberField.addEventListener('keyup' , (event)=>{// credit card numbe
 	creditNumberValidation=false;
 	if (isNaN(event.target.value)){
 		event.target.placeholder="numbers only";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if (event.target.value.length < 13){
 		event.target.placeholder="number is too short";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if (event.target.value==""){
 		event.target.placeholder="required";
-		hideElement(submitButton);
+		
 		return isSubmitable()	
 	}else if (event.target.value.length > 16){
 		event.target.placeholder="number is too long";
-		hideElement(submitButton);
+		
 		return isSubmitable()	
 	}else{
 		event.target.placeholder="";
@@ -147,15 +145,15 @@ zipField.addEventListener('keyup', (event)=>{// zip number field
 	zipValidation = false;
 	if (event.target.value === ""){
 		event.target.placeholder="requried";
-		hideElement(submitButton);
+		
 		return isSubmitable()	
 	}else if (event.target.value.length < 5 || event.target.value.length > 5){
 		event.target.placeholder="not in range";
-		hideElement(submitButton);
+		
 		return isSubmitable()	 
 	}else if (isNaN(event.target.value)){
 		event.target.placeholder="numbers only";
-		hideElement(submitButton);
+		
 		return isSubmitable()	 
 	}else{ 
 		event.target.placeholder="";
@@ -170,15 +168,15 @@ cvvField.addEventListener('keyup', (event)=>{ // cvv number field
 	ccvValidation = false;
 	if (event.target.value == ""){
 		event.target.placeholder="required";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if(isNaN(event.target.value)){
 		event.target.placeholder="numbers";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if (event.target.value.length < 3||event.target.value.length > 3){
 		event.target.placeholder="invalid";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else{
 		event.target.placeholder="";
@@ -228,15 +226,16 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
 		showElement(colorMenu.parentNode)
 	};
 	hideColors();
-	colorMenu.value = "";
 	if (event.target.value === 'js puns'){
 		colorMenu.children[0].style.display="";
 		colorMenu.children[1].style.display="";
 		colorMenu.children[2].style.display="";
+		colorMenu.value = 'cornflowerblue';
 	}else if (event.target.value == 'heart js'){
 		colorMenu.children[3].style.display="";
 		colorMenu.children[4].style.display="";
 		colorMenu.children[5].style.display="";
+		colorMenu.value = 'dimgrey';
 	}
 
 })
@@ -253,11 +252,9 @@ function verifier(target, val){ //function to call every focusout, that wil dele
 function isSubmitable(){ //checking if the user input is valid.
 	if (paymentOptions.value ==="credit card"){creditCardValidity()};
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){
-		showElement(submitButton)
 		enableSubmit();	
 	}else{
 		disableSubmit;
-		hideElement(submitButton);	
 	}
 
 }
@@ -347,7 +344,6 @@ function onLoad(){
 	paymentSettings();
 	hideElement(colorMenu.parentNode);
 	totalCostElement();
-	hideElement(submitButton);
 	disableSubmit();
 }
 onLoad();

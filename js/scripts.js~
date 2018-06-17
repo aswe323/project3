@@ -63,11 +63,9 @@ nameField.addEventListener('keyup' , (event) =>{ //name field validation on ever
 		nameValidation = false;
 		if (event.target.value == ""){
 			event.target.placeholder = "your name please";	
-			hideElement(submitButton);
 			return isSubmitable()
 		}else if (isNaN(event.target.value) === false){
 			event.target.placeholder ="no numbers please";		
-			hideElement(submitButton);
 			return isSubmitable()
 		}else{
 			event.target.placeholder="";
@@ -82,11 +80,11 @@ emailField.addEventListener('keyup', (event) =>{ //mail field validation on ever
 	emailValidation = false;
 	if(event.target.value == ""){
 		event.target.placeholder="required";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
 		event.target.placeholder="invalid email address";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else{
 		event.target.placeholder="";
@@ -120,19 +118,19 @@ creditCardNumeberField.addEventListener('keyup' , (event)=>{// credit card numbe
 	creditNumberValidation=false;
 	if (isNaN(event.target.value)){
 		event.target.placeholder="numbers only";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if (event.target.value.length < 13){
 		event.target.placeholder="number is too short";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if (event.target.value==""){
 		event.target.placeholder="required";
-		hideElement(submitButton);
+		
 		return isSubmitable()	
 	}else if (event.target.value.length > 16){
 		event.target.placeholder="number is too long";
-		hideElement(submitButton);
+		
 		return isSubmitable()	
 	}else{
 		event.target.placeholder="";
@@ -147,15 +145,15 @@ zipField.addEventListener('keyup', (event)=>{// zip number field
 	zipValidation = false;
 	if (event.target.value === ""){
 		event.target.placeholder="requried";
-		hideElement(submitButton);
+		
 		return isSubmitable()	
 	}else if (event.target.value.length < 5 || event.target.value.length > 5){
 		event.target.placeholder="not in range";
-		hideElement(submitButton);
+		
 		return isSubmitable()	 
 	}else if (isNaN(event.target.value)){
 		event.target.placeholder="numbers only";
-		hideElement(submitButton);
+		
 		return isSubmitable()	 
 	}else{ 
 		event.target.placeholder="";
@@ -170,15 +168,15 @@ cvvField.addEventListener('keyup', (event)=>{ // cvv number field
 	ccvValidation = false;
 	if (event.target.value == ""){
 		event.target.placeholder="required";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if(isNaN(event.target.value)){
 		event.target.placeholder="numbers";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else if (event.target.value.length < 3||event.target.value.length > 3){
 		event.target.placeholder="invalid";
-		hideElement(submitButton);
+		
 		return isSubmitable()
 	}else{
 		event.target.placeholder="";
@@ -228,15 +226,16 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
 		showElement(colorMenu.parentNode)
 	};
 	hideColors();
-	colorMenu.value = "";
 	if (event.target.value === 'js puns'){
 		colorMenu.children[0].style.display="";
 		colorMenu.children[1].style.display="";
 		colorMenu.children[2].style.display="";
+		colorMenu.value = 'gold';
 	}else if (event.target.value == 'heart js'){
 		colorMenu.children[3].style.display="";
 		colorMenu.children[4].style.display="";
 		colorMenu.children[5].style.display="";
+		colorMenu.value = colorMenu.children[3];
 	}
 
 })
@@ -253,16 +252,13 @@ function verifier(target, val){ //function to call every focusout, that wil dele
 function isSubmitable(){ //checking if the user input is valid.
 	if (paymentOptions.value ==="credit card"){creditCardValidity()};
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){
-		showElement(submitButton)
 		enableSubmit();	
 	}else{
 		disableSubmit;
-		hideElement(submitButton);	
 	}
 
 }
-// credit card validation
-function creditCardValidity (){
+function creditCardValidity (){ // credit card fields validation
 	paymentValidity = false;
 	console.log(ccvValidation , creditNumberValidation , zipValidation);
 	if (ccvValidation && creditNumberValidation && zipValidation){
@@ -272,8 +268,7 @@ function creditCardValidity (){
 
 
 
-//cost of activities
-function totalCostElement(){
+function totalCostElement(){ //adding a p element to the checkbox form
 //create a p element and add it to the end of the activities field
 	const sumElement = document.createElement('p');
 	checkBoxForm.appendChild(sumElement);
@@ -281,8 +276,7 @@ function totalCostElement(){
 
 
 
-//toggle function for disabled and enabled groups of two elements
-function disableOther (checkbox, arrey){
+function disableOther (checkbox, arrey){ //toggle function for disabled and enabled groups of two elements
 	//if the check box is disabled then enable it
 	if(arrey.includes(checkbox)){}else{return};
 	if (arrey[1].hasAttribute('disabled', 'true')|| arrey[0].hasAttribute('disabled', 'true')){
@@ -300,8 +294,7 @@ function disableOther (checkbox, arrey){
 	}	
 }
 
-//on start settings for pamet options
-function paymentSettings (){
+function paymentSettings (){//on start settings for payment options
 	paymentOptionsSelectables[0].remove();
 	paymentOptions.value ="credit card";
 	//hide all divs then show creditcard div
@@ -351,7 +344,6 @@ function onLoad(){
 	paymentSettings();
 	hideElement(colorMenu.parentNode);
 	totalCostElement();
-	hideElement(submitButton);
 	disableSubmit();
 }
 onLoad();
