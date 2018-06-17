@@ -64,60 +64,136 @@ var nameValidation = null;
  */
 
 nameField.addEventListener('keyup' , (event) =>{ //name field validation on every key up
+		nameValidation = false;
 		if (event.target.value == ""){
-			event.target.placeholder = "you name please";	
+			event.target.placeholder = "your name please";	
 			hideElement(submitButton);
-			return
+			return isSubmitable()
 		}else if (isNaN(event.target.value) === false){
 			event.target.placeholder ="no numbers please";		
 			hideElement(submitButton);
-			return
+			return isSubmitable()
 		}else{
-			console.log('name is good');
 			event.target.placeholder="";
-			nameValidation = true;}
+			nameValidation = true;
+		}
+			isSubmitable();
 	}
 )
+nameField.addEventListener('focusout', event=>verifier(event.target, nameValidation));
 
 emailField.addEventListener('keyup', (event) =>{ //mail field validation on every key up
+	emailValidation = false;
 	if(event.target.value == ""){
 		event.target.placeholder="required";
 		hideElement(submitButton);
-		return
+		return isSubmitable()
 	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
 		event.target.placeholder="invalid email address";
 		hideElement(submitButton);
-		return
+		return isSubmitable()
 	}else{
-		console.log('email is good');
 		event.target.placeholder="";
-		emailValidation = true;}
+		emailValidation = true;
+	}
+	isSubmitable();
 	}
 )
+emailField.addEventListener('focusout', event=>verifier(event.target, emailValidation));
 
 checkBoxForm.addEventListener('change', (event) =>{ //Activity checkboxes validation
+	activityValidation = false;	
 	checkBoxes.forEach(x=>{
 			if(x.checked){
 				activityValidation = true;
-				console.log('checked');
-			}else{
-				activityValidation = false;	
 			}
 		})
+		isSubmitable();
 	}
 )
 
 paymentOptions.addEventListener('change', (event) =>{ //payment options validation
+		paymentValidity = false;
 		if (event.target.value === "paypal" || event.target.value === "bitcoin"){paymentValidity = true;}
-		else{creditCardValidity()} 
+		isSubmitable();
+})
+
+//event listeners for the credit card options
+
+creditCardNumeberField.addEventListener('keyup' , (event)=>{// credit card number
+	creditNumberValidation=false;
+	if (isNaN(event.target.value)){
+		event.target.placeholder="numbers only";
+		hideElement(submitButton);
+		return isSubmitable()
+	}else if (event.target.value.length < 13){
+		event.target.placeholder="number is too short";
+		hideElement(submitButton);
+		return isSubmitable()
+	}else if (event.target.value==""){
+		event.target.placeholder="required";
+		hideElement(submitButton);
+		return isSubmitable()	
+	}else if (event.target.value.length > 16){
+		event.target.placeholder="number is too long";
+		hideElement(submitButton);
+		return isSubmitable()	
+	}else{
+		event.target.placeholder="";
+		creditNumberValidation=true;
 	}
-)
+	isSubmitable();
 
-//event listeners for the credit card option
-//CREDIT CARD
-//ZIP
-//CVV
+})
+creditCardNumeberField.addEventListener('focusout', event=>verifier(event.target, creditNumberValidation));
 
+zipField.addEventListener('keyup', (event)=>{// zip number field
+	zipValidation = false;
+	if (event.target.value === ""){
+		event.target.placeholder="requried";
+		hideElement(submitButton);
+		return isSubmitable()	
+	}else if (event.target.value.length < 5 || event.target.value.length > 5){
+		event.target.placeholder="not in range";
+		hideElement(submitButton);
+		return isSubmitable()	 
+	}else if (isNaN(event.target.value)){
+		event.target.placeholder="numbers only";
+		hideElement(submitButton);
+		return isSubmitable()	 
+	}else{ 
+		event.target.placeholder="";
+		zipValidation = true;
+	}			
+	isSubmitable();
+})
+
+zipField.addEventListener('focusout', event=>verifier(event.target, zipValidation));
+
+cvvField.addEventListener('keyup', (event)=>{ // cvv number field
+	ccvValidation = false;
+	if (event.target.value == ""){
+		event.target.placeholder="required";
+		hideElement(submitButton);
+		return isSubmitable()
+	}else if(isNaN(event.target.value)){
+		event.target.placeholder="numbers";
+		hideElement(submitButton);
+		return isSubmitable()
+	}else if (event.target.value.length < 3||event.target.value.length > 3){
+		event.target.placeholder="invalid";
+		hideElement(submitButton);
+		return isSubmitable()
+	}else{
+		event.target.placeholder="";
+		ccvValidation = true;
+	}
+	isSubmitable();
+
+
+})
+
+cvvField.addEventListener('focusout', event=>verifier(event.target, zipValidation));
 
 var main = false;
 checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
@@ -178,150 +254,33 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *              function that are used             |
  *-------------------------------------------------|
  */
-//function to call every focusout, that wil delete the content of a field if not valid
-function focusOut(target, val){
-	if (Array.from(document.querySelectorAll('select')).includes(target)){return console.log('test')};//<<<<<<<<<<<<<------------------ what needs to happen. UNTESTED
-	if (val===false){
+//function to call every focusout, that wil delete the content of a field if its approproate variable is no true 
+function verifier(target, val){
+	if (val!==true){
 		target.value="";
-		submitButton.setAttribute('disabled','true');
-	}else if (val === true){
-		submitButton.removeAttribute('disabled','true');
 	}
-	if (activityValidation && paymentValidity && nameValidation && emailValidation){showElement(submitButton)};
 }
-
-
-//a function that takes keyTarget and validates the element
-function validation(keyTarget){
-	val = false
-	//checks if the keyTarget is the first element
-	if (keyTarget === nameField){
-		if (keyTarget.value == ""){
-			keyTarget.placeholder ="you name please";	
-			hideElement(submitButton);
-			return
-		}else if (isNaN(keyTarget.value) == false){
-			keyTarget.placeholder ="no numbers please";		
-			hideElement(submitButton);
-			return
-		}else{
-			console.log('name is good');
-			keyTarget.placeholder="";
-			nameValidation = true;}
-			val= true;
+function isSubmitable(){
+	console.log('was called');
+	if (paymentOptions.value ==="credit card"){creditCardValidity()};
+	console.log(activityValidation , paymentValidity , nameValidation , emailValidation);
+	if (activityValidation && paymentValidity && nameValidation && emailValidation){
+		console.log('enabling');
+		showElement(submitButton)
+		enableSubmit();	
+	}else{
+		console.log('disabling');	
+		disableSubmit;
+		hideElement(submitButton);	
 	}
-	//checks if the target is the email element
-	if(keyTarget === document.querySelector('#mail')){
-		if(keyTarget.value == ""){
-			keyTarget.placeholder="required";
-			hideElement(submitButton);
-			return
-		}else if(keyTarget.value.includes('@')=== false || keyTarget.value.includes('.com') === false ){
-			keyTarget.placeholder="invalid email address";
-			hideElement(submitButton);
-			return
-		}else{
-			console.log('email is good');
-			keyTarget.placeholder="";
-			emailValidation = true;
-			val= true;
-		}
-	}
-	//if the chosen payment mathod is credit card
-	if (paymentOptions.value == "credit card"){
-		//check if the target is the cc-num field
-		if (keyTarget === document.querySelector('#cc-num')){
-			if (keyTarget.value.length > 16){
-				keyTarget.placeholder="number is too long";
-				hideElement(submitButton);
-				return
-			}else if (keyTarget.value.length < 13){
-				keyTarget.placeholder="number is too short";
-				hideElement(submitButton);
-				return
-			}else if (keyTarget.value==""){
-				keyTarget.placeholder="required";
-				hideElement(submitButton);
-				return	
-			}else if (isNaN(keyTarget.value)){
-				keyTarget.placeholder="numbers only";
-				hideElement(submitButton);
-				return	
-			}else{
-				console.log('credit number is good');
-				keyTarget.placeholder="";
-				creditNumberValidation=true;
-				val= true;
-			}
-		}
-
-		//check if the target is the zip code field
-		if (keyTarget === document.querySelector('#zip')){
-			if (keyTarget.value === ""){
-				keyTarget.placeholder="requried";
-				hideElement(submitButton);
-				return	
-			}else if (keyTarget.value.length < 5 || keyTarget.value.length > 5){
-				keyTarget.placeholder="invalid";
-				hideElement(submitButton);
-				return	 
-			}else if (isNaN(keyTarget.value)){
-				keyTarget.placeholder="numbers only";
-				hideElement(submitButton);
-				return	 
-			}else{ 
-				console.log('zip is good');
-				keyTarget.placeholder="";
-				zipValidation = true;
-				val= true;
-			}
-		}
-		//check if target is ccv field
-		if (keyTarget === document.querySelector('#cvv')){
-			if (keyTarget.value == ""){
-				keyTarget.placeholder="required";
-				hideElement(submitButton);
-				return
-			}else if(isNaN(keyTarget.value)){
-				keyTarget.placeholder="numbers";
-				hideElement(submitButton);
-				return
-			}else if (keyTarget.value.length < 3||keyTarget.value.length > 3){
-				console.log('NotInRange');
-				keyTarget.placeholder="invalid";
-				hideElement(submitButton);
-				return
-			}else{
-				console.log('cvv is good');
-				keyTarget.placeholder="";
-				ccvValidation = true;
-				val= true;
-		}
-	}
-	}
-	if (ccvValidation && creditNumberValidation && zipValidation){
-		var paymentValidity = true;
-		val= true;
-	}
-	if (paymentOptions.value == "paypal"|| paymentOptions.value == "bitcoin"){
-		val= true;
-		var paymentValidity= true;
-	}
-	//check if there is at lest one check box checked	
-	checkBoxes.forEach(x=>{
-		if(x.checked){activityValidation = true}
-		val= true;
-		}
-	);
-
-	if (activityValidation && paymentValidity && nameValidation && emailValidation){showElement(submitButton)};
 
 }
 // credit card validation
 function creditCardValidity (){
+	paymentValidity = false;
+	console.log(ccvValidation , creditNumberValidation , zipValidation);
 	if (ccvValidation && creditNumberValidation && zipValidation){
-		var paymentValidity = true;
-		val= true;
+		paymentValidity = true;
 	}
 }
 
@@ -390,6 +349,13 @@ function textAreaHide(){
 	textArea.style.display="none";
 }
 
+function disableSubmit(){
+	submitButton.setAttribute('disabled',"true");
+}
+
+function enableSubmit(){
+	submitButton.removeAttribute('disabled',"true");
+}
 
 //wha will happen when the js is loaded
 function onLoad(){
@@ -400,6 +366,6 @@ function onLoad(){
 	hideElement(colorMenu.parentNode);
 	totalCostElement();
 	hideElement(submitButton);
-	submitButton.setAttribute('disabled',"true");
+	disableSubmit();
 }
 onLoad();
