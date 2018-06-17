@@ -1,35 +1,12 @@
 /*
  * TO-ADD:
- *
- *	completed: on page load make the first text field focus
- *	completed:when the 'outer' option is selected in the 'job role' drop down menu, make a text field apper
- *		*set field placeholder to 'you job here'
- *		*set field id to 'outer-title
- *	completed:If the user selects "Theme - JS Puns" then the color menu should only display "Cornflower Blue," "Dark Slate" Grey," and "Gold."
- *
- *	conpleted:If the user selects "Theme - I <3 JS" then the color menu should only display "Tomato," "Steel Blue," and "Dim Grey."
- *
- *	complete:for the activities, disable activities that overlap with the users choices.
- *		*make sure they undisabled when the user regrets his decision :P
- *		*make a total cost field in the buttom
- *
- *	completed:hide the color menu when the desgin isnt selected yet.
- * 	completed:hide payment options that arent selected, and disable he 'select payment option' pre selection text.
- *---> 	completed: form falidation
- * 		1.name field value cant be blank
- * 		2.check for valid email format in email field. (regex? specific strings?)
- * 		3.check for checked boxes in the checkboxes arrey, if one is selected return false.
- * 		4.for payment options
- * 			*credit card return true if between 13 to 16 value long.
- * 			*zip code true if 5 value long
- * 			*cvv true if 3 digit long
- * 	
- *		for each false value, attach a dedicated message, and display it above the corresponding element.
- *		HOWTO: add a global event handeler, that triggeres with every change to the html. 
- *			make short if statements for each check that evaluate to true or false. 
- *			make a function that will add or remove warning messages above the appropriate element.
- *				and disable the submit button.
- *
+ *	TODO: make individuale event listeners for each relevent element :(
+ *		1.use keyup for input fields
+ *		2. use change for select menus
+ *		3. use loop over checkboxes for checked atribute.
+ *		
+ *		* use the current validation if statements for basics for each validation
+ *		* use the same validation if statement thatc checks for true/false in all relevent elements
  *	TODO:make sure to update the lists when  all the current todo's are done 
  * 	KNOWN BUGS:
  *	email validation:
@@ -40,8 +17,9 @@
  * */
 
 //accessing neccesery elements
-const firstInput = document.querySelector('input');//first input element
-const titleSelect = document.getElementById('title');//job rule menu
+const nameField = document.querySelector('#name');//name input field 
+const emailField = document.querySelector('#mail'); // mail input field
+const titleSelect = document.getElementById('title');// job rule menu
 const textArea = document.querySelector("#other-title");//text area below job rule menu
 //design menu acceses
 const designMenu = document.querySelector("#design");// design style menu
@@ -60,26 +38,60 @@ const creditCardDiv = document.querySelector('.credit-card');//credit card div
 const paymentDivs= paymentOptions.parentNode.querySelectorAll('fieldset>div');//all divs in the payment fieldset
 //acces to submit element
 const submitButton = document.querySelector('button');
+
+
+/*-------------------------------------------------|
+ *              validation variables		   |
+ *-------------------------------------------------|
+*/
+
+var val= false;
+var activityValidation = null;
+var ccvValidation = null;
+var paymentValidity= null;
+var zipValidation = null;
+var creditNumberValidation = null; 
+var emailValidation = null;
+var nameValidation = null;
+
+
 /*-------------------------------------------------|
  *              event listeneers                   |
  *-------------------------------------------------|
  */
-var val= false;
-//check for validation on every keyup 
-var keyTarget = document.addEventListener('keyup', (event)=>validation(event.target));
 
-//every focus out, check if the value is correct,if not deleting the value to display the placeholder
-window.addEventListener('focusout',(event)=>focusOut(event.target ,val));
-
-titleSelect.addEventListener('change', event => {  //if other is selected then display a textarea if its not selected then  hide it
-		if (event.target.value === "other"){
-			textArea.style.display="";
+nameField.addEventListener('keyup' , (event) =>{ //name field validation on every key up
+		console.log('detected');
+		if (event.target.value == ""){
+			event.target.placeholder = "you name please";	
+			hideElement(submitButton);
+			return
+		}else if (isNaN(event.target.value) === false){
+			event.target.placeholder ="no numbers please";		
+			hideElement(submitButton);
+			return
 		}else{
-			textAreaHide();
-		}
+			console.log('name is good');
+			event.target.placeholder="";
+			nameValidation = true;}
 	}
 )
-
+emailField.addEventListener('keyup', (event) =>{
+	if(event.target.value == ""){
+		event.target.placeholder="required";
+		hideElement(submitButton);
+		return
+	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
+		event.target.placeholder="invalid email address";
+		hideElement(submitButton);
+		return
+	}else{
+		console.log('email is good');
+		event.target.placeholder="";
+		emailValidation = true;
+		val= true;}
+	}
+)
 
 var main = false;
 checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
@@ -152,18 +164,12 @@ function focusOut(target, val){
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){showElement(submitButton)};
 }
 
-var activityValidation = null;
-var ccvValidation = null;
-var paymentValidity= null;
-var zipValidation = null;
-var creditNumberValidation = null; 
-var emailValidation = null;
-var nameValidation = null;
+
 //a function that takes keyTarget and validates the element
 function validation(keyTarget){
 	val = false
 	//checks if the keyTarget is the first element
-	if (keyTarget === firstInput){
+	if (keyTarget === nameField){
 		if (keyTarget.value == ""){
 			keyTarget.placeholder ="you name please";	
 			hideElement(submitButton);
@@ -269,13 +275,16 @@ function validation(keyTarget){
 	}
 	if (ccvValidation && creditNumberValidation && zipValidation){
 		var paymentValidity = true;
+		val= true;
 	}
 	if (paymentOptions.value == "paypal"|| paymentOptions.value == "bitcoin"){
+		val= true;
 		var paymentValidity= true;
 	}
 	//check if there is at lest one check box checked	
 	checkBoxes.forEach(x=>{
 		if(x.checked){activityValidation = true}
+		val= true;
 		}
 	);
 
@@ -342,7 +351,7 @@ function hideColors(){
 
 //on page load (when the js is loaded i gues?) make the first textfield focus
 function setFocus (){
-	firstInput.setAttribute('autofocus', 'true');
+	nameField.setAttribute('autofocus', 'true');
 }
 
 //hide the textfield
