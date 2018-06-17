@@ -61,7 +61,6 @@ var nameValidation = null;
  */
 
 nameField.addEventListener('keyup' , (event) =>{ //name field validation on every key up
-		console.log('detected');
 		if (event.target.value == ""){
 			event.target.placeholder = "you name please";	
 			hideElement(submitButton);
@@ -74,6 +73,40 @@ nameField.addEventListener('keyup' , (event) =>{ //name field validation on ever
 			console.log('name is good');
 			event.target.placeholder="";
 			nameValidation = true;}
+	}
+)
+
+emailField.addEventListener('keyup', (event) =>{ //mail field validation on every key up
+	if(event.target.value == ""){
+		event.target.placeholder="required";
+		hideElement(submitButton);
+		return
+	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
+		event.target.placeholder="invalid email address";
+		hideElement(submitButton);
+		return
+	}else{
+		console.log('email is good');
+		event.target.placeholder="";
+		emailValidation = true;}
+	}
+)
+
+checkBoxForm.addEventListener('change', (event) =>{ //Activity checkboxes validation
+	checkBoxes.forEach(x=>{
+			if(x.checked){
+				activityValidation = true;
+				console.log('checked');
+			}else{
+				activityValidation = false;	
+			}
+		})
+	}
+)
+
+paymentOptions.addEventListener('change', (event) =>{ //payment options validation
+		if (event.target.value === "paypal" || event.target.value === "bitcoin"){paymentValidity = true;}
+		else{paymentValidity = false} 
 	}
 )
 

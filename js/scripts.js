@@ -17,6 +17,9 @@
  * */
 
 //accessing neccesery elements
+const cvvField = document.querySelector('#cvv'); // cvv field
+const zipField = document.querySelector('#zip'); // zip field
+const creditCardNumeberField = document.querySelector('#cc-num'); //credit card number field
 const nameField = document.querySelector('#name');//name input field 
 const emailField = document.querySelector('#mail'); // mail input field
 const titleSelect = document.getElementById('title');// job rule menu
@@ -61,7 +64,6 @@ var nameValidation = null;
  */
 
 nameField.addEventListener('keyup' , (event) =>{ //name field validation on every key up
-		console.log('detected');
 		if (event.target.value == ""){
 			event.target.placeholder = "you name please";	
 			hideElement(submitButton);
@@ -76,7 +78,8 @@ nameField.addEventListener('keyup' , (event) =>{ //name field validation on ever
 			nameValidation = true;}
 	}
 )
-emailField.addEventListener('keyup', (event) =>{
+
+emailField.addEventListener('keyup', (event) =>{ //mail field validation on every key up
 	if(event.target.value == ""){
 		event.target.placeholder="required";
 		hideElement(submitButton);
@@ -88,10 +91,33 @@ emailField.addEventListener('keyup', (event) =>{
 	}else{
 		console.log('email is good');
 		event.target.placeholder="";
-		emailValidation = true;
-		val= true;}
+		emailValidation = true;}
 	}
 )
+
+checkBoxForm.addEventListener('change', (event) =>{ //Activity checkboxes validation
+	checkBoxes.forEach(x=>{
+			if(x.checked){
+				activityValidation = true;
+				console.log('checked');
+			}else{
+				activityValidation = false;	
+			}
+		})
+	}
+)
+
+paymentOptions.addEventListener('change', (event) =>{ //payment options validation
+		if (event.target.value === "paypal" || event.target.value === "bitcoin"){paymentValidity = true;}
+		else{creditCardValidity()} 
+	}
+)
+
+//event listeners for the credit card option
+//CREDIT CARD
+//ZIP
+//CVV
+
 
 var main = false;
 checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
@@ -291,8 +317,13 @@ function validation(keyTarget){
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){showElement(submitButton)};
 
 }
-
-
+// credit card validation
+function creditCardValidity (){
+	if (ccvValidation && creditNumberValidation && zipValidation){
+		var paymentValidity = true;
+		val= true;
+	}
+}
 
 
 
