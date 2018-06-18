@@ -65,14 +65,14 @@ var nameValidation = null;
 nameField.addEventListener('keyup' , (event) =>{ //name field validation on every key up
 		nameValidation = false;
 		if (event.target.value == ""){
-			event.target.placeholder = "your name please";	
+			errorHandler("your name please", event.target, nameValidation);
 			return isSubmitable()
 		}else if (isNaN(event.target.value) === false){
-			event.target.placeholder ="no numbers please";		
+			errorHandler("no numbers please", event.target, nameValidation);
 			return isSubmitable()
 		}else{
-			event.target.placeholder="";
 			nameValidation = true;
+			errorHandler("if you see this there have been an internal error in the error handeler", event.target, nameValidation);
 		}
 			isSubmitable();
 	}
@@ -271,10 +271,10 @@ function creditCardValidity (){ // credit card fields validation
 
 
 
-function totalCostElement(){ //adding a p element to the checkbox form
+function addPElementTo(appended){ //adding a p element to the checkbox form
 //create a p element and add it to the end of the activities field
 	const sumElement = document.createElement('p');
-	checkBoxForm.appendChild(sumElement);
+	appended.appendChild(sumElement);
 }
 
 
@@ -306,7 +306,22 @@ function paymentSettings (){//on start settings for payment options
 }
 
 //error element handeling
-function errorHandler(str, elementPosition:w
+function errorHandler(str, element, bool){
+
+	if (bool === false){
+		if(element.nextElementSibling.hasAttribute('[class="error"]')){
+			console.log('previous message deleted');
+			element.nextElementSibling.remove();	
+		}
+		let error = document.createElement('p');
+		error.innerHTML = str;
+		error.setAttribute('class', 'error');
+		element.parentNode.insertBefore(error, element.nextElementSibling);
+	}
+	else if(bool === true && element.nextElementSibling.hasAttribute('[class=error]')){
+		element.nextElementSibling.remove();	
+	}
+}
 
 
 //hiding a given element.
@@ -349,7 +364,7 @@ function onLoad(){
 	hideColors();
 	paymentSettings();
 	hideElement(colorMenu.parentNode);
-	totalCostElement();
+	addPElementTo(checkBoxForm);
 	disableSubmit();
 }
 onLoad();
