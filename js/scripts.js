@@ -77,26 +77,22 @@ nameField.addEventListener('keyup' , (event) =>{ //name field validation on ever
 			isSubmitable();
 	}
 )
-nameField.addEventListener('focusout', event=>verifier(event.target, nameValidation));
 
 emailField.addEventListener('keyup', (event) =>{ //mail field validation on every key up
 	emailValidation = false;
 	if(event.target.value == ""){
-		event.target.placeholder="required";
-		errorHandler("required");		
+		errorHandler("required",event.target,emailValidation);		
 		return isSubmitable()
 	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
-		event.target.placeholder="invalid email address";
-		
+		errorHandler("invalid email addres",event.target,emailValidation);		
 		return isSubmitable()
 	}else{
-		event.target.placeholder="";
 		emailValidation = true;
+		errorHandler("error handeler fail",event.target,emailValidation);		
 	}
 	isSubmitable();
 	}
 )
-emailField.addEventListener('focusout', event=>verifier(event.target, emailValidation));
 
 checkBoxForm.addEventListener('change', (event) =>{ //Activity checkboxes validation
 	activityValidation = false;	
@@ -120,77 +116,65 @@ paymentOptions.addEventListener('change', (event) =>{ //payment options validati
 creditCardNumeberField.addEventListener('keyup' , (event)=>{// credit card number
 	creditNumberValidation=false;
 	if (isNaN(event.target.value)){
-		event.target.placeholder="numbers only";
-		
+		errorHandler('numbers only', event.target, creditNumberValidation);
 		return isSubmitable()
 	}else if (event.target.value.length < 13){
 		event.target.placeholder="number is too short";
-		
+		errorHandler('number is too short', event.target, creditNumberValidation);
 		return isSubmitable()
 	}else if (event.target.value==""){
-		event.target.placeholder="required";
-		
+		errorHandler('required', event.target, creditNumberValidation);
 		return isSubmitable()	
 	}else if (event.target.value.length > 16){
-		event.target.placeholder="number is too long";
-		
+		errorHandler('number too long', event.target, creditNumberValidation);
 		return isSubmitable()	
 	}else{
-		event.target.placeholder="";
 		creditNumberValidation=true;
+		errorHandler('errorHandeler failed', event.target, creditNumberValidation);
 	}
 	isSubmitable();
 
 })
-creditCardNumeberField.addEventListener('focusout', event=>verifier(event.target, creditNumberValidation));
 
 zipField.addEventListener('keyup', (event)=>{// zip number field
 	zipValidation = false;
 	if (event.target.value === ""){
-		event.target.placeholder="requried";
-		
+		errorHandler('requried', event.target, zipValidation);	
 		return isSubmitable()	
 	}else if (event.target.value.length < 5 || event.target.value.length > 5){
-		event.target.placeholder="not in range";
-		
+		errorHandler('not in range', event.target, zipValidation);	
 		return isSubmitable()	 
 	}else if (isNaN(event.target.value)){
-		event.target.placeholder="numbers only";
-		
+		errorHandler('numbers only', event.target, zipValidation);	
 		return isSubmitable()	 
 	}else{ 
-		event.target.placeholder="";
 		zipValidation = true;
+		errorHandler('errorHandeler failed', event.target, zipValidation);	
 	}			
 	isSubmitable();
 })
 
-zipField.addEventListener('focusout', event=>verifier(event.target, zipValidation));
 
 cvvField.addEventListener('keyup', (event)=>{ // cvv number field
 	ccvValidation = false;
 	if (event.target.value == ""){
-		event.target.placeholder="required";
-		
+		errorHandler('required', event.target, ccvValidation);	
 		return isSubmitable()
 	}else if(isNaN(event.target.value)){
-		event.target.placeholder="numbers";
-		
+		errorHandler('numebrs only', event.target, ccvValidation);	
 		return isSubmitable()
 	}else if (event.target.value.length < 3||event.target.value.length > 3){
-		event.target.placeholder="invalid";
-		
+		errorHandler('invalid', event.target, ccvValidation);	
 		return isSubmitable()
 	}else{
-		event.target.placeholder="";
 		ccvValidation = true;
+		errorHandler('errorHandeler failed', event.target, ccvValidation);	
 	}
 	isSubmitable();
 
 
 })
 
-cvvField.addEventListener('focusout', event=>verifier(event.target, zipValidation));
 
 checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
 	const tNineToTwelve = [checkBoxes[1] , checkBoxes[3]];//arrey of checkbox elements, Tusday nine am to 12pm
@@ -247,11 +231,7 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *              function that are used             |
  *-------------------------------------------------|
  */
-function verifier(target, val){ //function to call every focusout, that wil delete the content of a field if its approproate variable is no true 
-	if (val!==true){
-		target.value="";
-	}
-}
+
 function isSubmitable(){ //checking if the user input is valid.
 	if (paymentOptions.value ==="credit card"){creditCardValidity()};
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){
@@ -304,7 +284,7 @@ function paymentSettings (){//on start settings for payment options
 	paymentDivs.forEach((x)=>hideElement(x));
 	showElement(creditCardDiv);
 }
-//has attr problem?
+
 //error element handeling
 function errorHandler(str, element, bool){
 	let errorElement = element.parentNode.querySelector('#'+element.id+'+ p[class="error"]');
@@ -315,6 +295,7 @@ function errorHandler(str, element, bool){
 		let error = document.createElement('p');
 		error.innerHTML = str;
 		error.setAttribute('class', 'error');
+		console.log(' attempting to insert error message');
 		element.parentNode.insertBefore(error, element.nextElementSibling);
 	}
 	else if(bool === true && errorElement){
