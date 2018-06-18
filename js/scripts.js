@@ -83,7 +83,7 @@ emailField.addEventListener('keyup', (event) =>{ //mail field validation on ever
 	emailValidation = false;
 	if(event.target.value == ""){
 		event.target.placeholder="required";
-		
+		errorHandler("required");		
 		return isSubmitable()
 	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
 		event.target.placeholder="invalid email address";
@@ -304,13 +304,12 @@ function paymentSettings (){//on start settings for payment options
 	paymentDivs.forEach((x)=>hideElement(x));
 	showElement(creditCardDiv);
 }
-//sense nextElementSibling is read only it cant be deleted. need to find a work around
+//has attr problem?
 //error element handeling
 function errorHandler(str, element, bool){
-
+	let errorElement = element.parentNode.querySelector('#'+element.id+'+ p[class="error"]');
 	if (bool === false){
-		if(element.nextElementSibling.hasAttribute('[class="error"]')){
-			console.log('previous message deleted');
+		if(errorElement){
 			element.nextElementSibling.remove();	
 		}
 		let error = document.createElement('p');
@@ -318,8 +317,8 @@ function errorHandler(str, element, bool){
 		error.setAttribute('class', 'error');
 		element.parentNode.insertBefore(error, element.nextElementSibling);
 	}
-	else if(bool === true && element.nextElementSibling.hasAttribute('[class=error]')){
-		element.nextElementSibling.remove();	
+	else if(bool === true && errorElement){
+		errorElement.remove();
 	}
 }
 
