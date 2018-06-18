@@ -304,7 +304,7 @@ function paymentSettings (){//on start settings for payment options
 	paymentDivs.forEach((x)=>hideElement(x));
 	showElement(creditCardDiv);
 }
-
+//sense nextElementSibling is read only it cant be deleted. need to find a work around
 //error element handeling
 function errorHandler(str, element, bool){
 
