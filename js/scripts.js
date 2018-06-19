@@ -33,7 +33,8 @@ const creditCardDiv = document.querySelector('.credit-card');//credit card div
 const paymentDivs= paymentOptions.parentNode.querySelectorAll('fieldset>div');//all divs in the payment fieldset
 //acces to submit element
 const submitButton = document.querySelector('button');
-
+// job rule menu access
+const jobRuleMenu = document.querySelector('#title');
 
 /*-------------------------------------------------|
  *              validation variables		   |
@@ -47,18 +48,21 @@ var zipValidation = null;
 var creditNumberValidation = null; 
 var emailValidation = null;
 var nameValidation = null;
-
+var otherJobValidation =null;
 
 /*-------------------------------------------------|
  *              event listeneers                   |
  *-------------------------------------------------|
  */
 submitButton.addEventListener('click', ()=>{
-	if (activityValidation && paymentValidity && nameValidation && emailValidation){}
+	if (activityValidation && paymentValidity && nameValidation && emailValidation && otherJobValidation){}
 	else{
 		if (activityValidation !== true){
 			checkBoxForm.querySelector('p').innerHTML ="please choose an activity";
 			checkBoxForm.querySelector('p').style.color ="red";
+		}
+		if (jobRuleMenu.value!=='full-stack js developer' && otherJobValidation === null){
+		otherJobValidator();
 		}
 		nameFieldValidation();
 		cvvValidator();
@@ -72,13 +76,18 @@ submitButton.addEventListener('click', ()=>{
 
 });
 
-document.querySelector('#title').addEventListener('change', (event)=>{
+jobRuleMenu.addEventListener('change', (event)=>{
+	otherJobValidation = false;
 	if (event.target.value === 'other'){
 		showElement(textArea);	
 	}else{
 		hideElement(textArea);
+		otherJobValidation = true;
+		errorHandler('errorHandeler Failed', textArea, otherJobValidation);
 	}
 })
+
+textArea.addEventListener('keyup' ,() =>otherJobValidator());
 
 nameField.addEventListener('keyup' ,() => nameFieldValidation());
 
@@ -174,6 +183,15 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *              function that are used             |
  *-------------------------------------------------|
  */
+function otherJobValidator(){
+	otherJobValidation = false;
+	if (textArea.value ===""){
+		errorHandler('required', textArea, otherJobValidation);
+	}else{
+		otherJobValidation = true;
+		errorHandler('errorHandeler failed', textArea, otherJobValidation);
+	}
+}
 
 function cvvValidator(){
 	ccvValidation = false;
@@ -267,7 +285,8 @@ function nameFieldValidation(){
 }	
 function isSubmitable(){ //checking if the user input is valid.
 	if (paymentOptions.value ==="credit card"){creditCardValidity()};
-	if (activityValidation && paymentValidity && nameValidation && emailValidation){
+	if (jobRuleMenu.value === 'full-stack js developer' && otherJobValidation === null){otherJobValidation=true};
+	if (activityValidation && paymentValidity && nameValidation && emailValidation && otherJobValidation){
 		enableSubmit();
 	}
 }
