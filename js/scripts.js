@@ -1,15 +1,7 @@
 /*
  * TO-ADD:
- * 	TODO: make a functin that will get an error string, an element, and  a true or false value
- * 	, if true will make a new p element ABOVE the given element with the string
- *	if false will remove the p element.
- *	TODO: make individuale event listeners for each relevent element :(
- *		1.use keyup for input fields
- *		2. use change for select menus
- *		3. use loop over checkboxes for checked atribute.
- *		
- *		* use the current validation if statements for basics for each validation
- *		* use the same validation if statement thatc checks for true/false in all relevent elements
+ *---->	TODO:make all the validation testing FUNCTIONS with individuale function per field
+ *
  *	TODO:make sure to update the lists when  all the current todo's are done 
  * 	KNOWN BUGS:
  *	email validation:
@@ -61,6 +53,24 @@ var nameValidation = null;
  *              event listeneers                   |
  *-------------------------------------------------|
  */
+submitButton.addEventListener('click', ()=>{
+	if (activityValidation && paymentValidity && nameValidation && emailValidation){}
+	else{
+		if (activityValidation !== true){
+			checkBoxForm.querySelector('p').innerHTML ="please choose an activity";
+			checkBoxForm.querySelector('p').style.color ="red";
+		}
+		nameFieldValidation();
+		cvvValidator();
+		zipValidator();
+		creditsNumberValidation();
+		emailFieldValidation();
+		disableSubmit();
+	}
+
+	console.log('clicked')
+
+});
 
 document.querySelector('#title').addEventListener('change', (event)=>{
 	if (event.target.value === 'other'){
@@ -70,43 +80,16 @@ document.querySelector('#title').addEventListener('change', (event)=>{
 	}
 })
 
-nameField.addEventListener('keyup' , (event) =>{ //name field validation on every key up
-		nameValidation = false;
-		if (event.target.value == ""){
-			errorHandler("your name please", event.target, nameValidation);
-			return isSubmitable()
-		}else if (isNaN(event.target.value) === false){
-			errorHandler("no numbers please", event.target, nameValidation);
-			return isSubmitable()
-		}else{
-			nameValidation = true;
-			errorHandler("if you see this there have been an internal error in the error handeler", event.target, nameValidation);
-		}
-			isSubmitable();
-	}
-)
+nameField.addEventListener('keyup' ,() => nameFieldValidation());
 
-emailField.addEventListener('keyup', (event) =>{ //mail field validation on every key up
-	emailValidation = false;
-	if(event.target.value == ""){
-		errorHandler("required",event.target,emailValidation);		
-		return isSubmitable()
-	}else if(event.target.value.includes('@')=== false || event.target.value.includes('.com') === false ){
-		errorHandler("invalid email addres",event.target,emailValidation);		
-		return isSubmitable()
-	}else{
-		emailValidation = true;
-		errorHandler("error handeler fail",event.target,emailValidation);		
-	}
-	isSubmitable();
-	}
-)
+emailField.addEventListener('keyup', () =>emailFieldValidation());
 
 checkBoxForm.addEventListener('change', (event) =>{ //Activity checkboxes validation
 	activityValidation = false;	
 	checkBoxes.forEach(x=>{
 			if(x.checked){
 				activityValidation = true;
+				return
 			}
 		})
 	isSubmitable();
@@ -121,67 +104,12 @@ paymentOptions.addEventListener('change', (event) =>{ //payment options validati
 
 //event listeners for the credit card options
 
-creditCardNumeberField.addEventListener('keyup' , (event)=>{// credit card number
-	creditNumberValidation=false;
-	if (isNaN(event.target.value)){
-		errorHandler('numbers only', event.target, creditNumberValidation);
-		return isSubmitable()
-	}else if (event.target.value.length < 13){
-		event.target.placeholder="number is too short";
-		errorHandler('number is too short', event.target, creditNumberValidation);
-		return isSubmitable()
-	}else if (event.target.value==""){
-		errorHandler('required', event.target, creditNumberValidation);
-		return isSubmitable()	
-	}else if (event.target.value.length > 16){
-		errorHandler('number too long', event.target, creditNumberValidation);
-		return isSubmitable()	
-	}else{
-		creditNumberValidation=true;
-		errorHandler('errorHandeler failed', event.target, creditNumberValidation);
-	}
-	isSubmitable();
+creditCardNumeberField.addEventListener('keyup' , ()=>creditsNumberValidation());
 
-})
-
-zipField.addEventListener('keyup', (event)=>{// zip number field
-	zipValidation = false;
-	if (event.target.value === ""){
-		errorHandler('requried', event.target, zipValidation);	
-		return isSubmitable()	
-	}else if (event.target.value.length < 5 || event.target.value.length > 5){
-		errorHandler('not in range', event.target, zipValidation);	
-		return isSubmitable()	 
-	}else if (isNaN(event.target.value)){
-		errorHandler('numbers only', event.target, zipValidation);	
-		return isSubmitable()	 
-	}else{ 
-		zipValidation = true;
-		errorHandler('errorHandeler failed', event.target, zipValidation);	
-	}			
-	isSubmitable();
-})
+zipField.addEventListener('keyup', ()=>zipValidator());
 
 
-cvvField.addEventListener('keyup', (event)=>{ // cvv number field
-	ccvValidation = false;
-	if (event.target.value == ""){
-		errorHandler('required', event.target, zipValidation);	
-		return isSubmitable()
-	}else if(isNaN(event.target.value)){
-		errorHandler('numebrs only', event.target, zipValidation);	
-		return isSubmitable()
-	}else if (event.target.value.length < 3||event.target.value.length > 3){
-		errorHandler('invalid', event.target, zipValidation);	
-		return isSubmitable()
-	}else{
-		ccvValidation = true;
-		errorHandler('errorHandeler failed', event.target, zipValidation);	
-	}
-	isSubmitable();
-
-
-})
+cvvField.addEventListener('keyup', ()=>cvvValidator());
 
 
 checkBoxForm.addEventListener('change', event =>{  //event listener for specific button groups
@@ -194,10 +122,17 @@ checkBoxForm.addEventListener('change', event =>{  //event listener for specific
 			costSum  = costSum + 200;
 		}else if (box.checked && box !== checkBoxes[0]){
 			costSum  = costSum + 100;
-		}		
+		}
 		return costSum;
 	}, 0)
 	//adding total cost to the inner html of the p element under the checkboxes
+	if (totalCost === 0){
+		checkBoxForm.querySelector('p').style.color ="red";
+		totalCost = "please choose an activity"
+	}else{
+		checkBoxForm.querySelector('p').style.color ="";
+		totalCost= '$'+totalCost
+	}
 	checkBoxForm.querySelector('p').innerHTML = totalCost;	
 }
 )
@@ -240,19 +175,105 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
  *-------------------------------------------------|
  */
 
+function cvvValidator(){
+	ccvValidation = false;
+	if (cvvField.value === ""){
+		errorHandler('required', cvvField, ccvValidation);	
+		return isSubmitable()
+	}else if(isNaN(cvvField.value)){
+		errorHandler('numebrs only', cvvField, ccvValidation);	
+		return isSubmitable()
+	}else if (cvvField.value.length < 3||cvvField.value.length > 3){
+		errorHandler('invalid', cvvField, ccvValidation);	
+		return isSubmitable()
+	}else{
+		ccvValidation = true;
+		errorHandler('errorHandeler failed', cvvField, ccvValidation);	
+	}
+	isSubmitable();
+}
+
+
+
+function zipValidator(){
+	zipValidation = false;
+	if (zipField.value === ""){
+		errorHandler('requried', zipField, zipValidation);	
+		return isSubmitable()	
+	}else if (zipField.value.length < 5 || zipField.value.length > 5){
+		errorHandler('not in range', zipField, zipValidation);	
+		return isSubmitable()	 
+	}else if (isNaN(zipField.value)){
+		errorHandler('numbers only', zipField, zipValidation);	
+		return isSubmitable()	 
+	}else{ 
+		zipValidation = true;
+		errorHandler('errorHandeler failed', zipField, zipValidation);	
+	}			
+	isSubmitable();
+}
+
+
+function creditsNumberValidation(){
+	creditNumberValidation=false;
+	if (isNaN(creditCardNumeberField.value)){
+		errorHandler('numbers only', creditCardNumeberField, creditNumberValidation);
+		return isSubmitable()
+	}else if (creditCardNumeberField.value==""){
+		errorHandler('required', creditCardNumeberField, creditNumberValidation);
+		return isSubmitable()	
+	}else if (creditCardNumeberField.value.length < 13){
+		errorHandler('number is too short', creditCardNumeberField, creditNumberValidation);
+		return isSubmitable()
+	}else if (creditCardNumeberField.value.length > 16){
+		errorHandler('number too long', creditCardNumeberField, creditNumberValidation);
+		return isSubmitable()	
+	}else{
+		creditNumberValidation=true;
+		errorHandler('errorHandeler failed', creditCardNumeberField, creditNumberValidation);
+	}
+	isSubmitable();
+}	
+
+function emailFieldValidation(){
+	emailValidation = false;
+	if(emailField.value == ""){
+		errorHandler("required",emailField,emailValidation);		
+		return isSubmitable()
+	}else if(emailField.value.includes('@')=== false || emailField.value.includes('.com') === false ){
+		errorHandler("invalid email addres",emailField,emailValidation);		
+		return isSubmitable()
+	}else{
+		emailValidation = true;
+		errorHandler("error handeler fail",emailField,emailValidation);		
+	}
+	isSubmitable();
+}
+
+
+function nameFieldValidation(){
+		nameValidation = false;
+		if (nameField.value == ""){
+			errorHandler("your name please", nameField, nameValidation);
+			return isSubmitable()
+		}else if (isNaN(nameField.value) === false){
+			errorHandler("no numbers please", nameField, nameValidation);
+			return isSubmitable()
+		}else{
+			nameValidation = true;
+			errorHandler("if you see this there have been an internal error in the error handeler", nameField, nameValidation);
+		}
+			isSubmitable();
+}	
 function isSubmitable(){ //checking if the user input is valid.
 	if (paymentOptions.value ==="credit card"){creditCardValidity()};
-	console.log(activityValidation , paymentValidity , nameValidation , emailValidation)
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){
-		enableSubmit();	
-	}else{
-		disableSubmit();
+		enableSubmit();
 	}
-
 }
+
 function creditCardValidity (){ // credit card fields validation
 	paymentValidity = false;
-	console.log(ccvValidation , creditNumberValidation , zipValidation);
 	if (ccvValidation && creditNumberValidation && zipValidation){
 		paymentValidity = true;
 	}
@@ -303,6 +324,7 @@ function errorHandler(str, element, bool){
 		}
 		let error = document.createElement('p');
 		error.innerHTML = str;
+		error.style.color = "red";
 		error.setAttribute('class', 'error');
 		element.parentNode.insertBefore(error, element.nextElementSibling);
 	}
@@ -356,6 +378,7 @@ function disableSubmit(){
 }
 
 function enableSubmit(){
+	console.log('enabling');
 	submitButton.style.color="white";
 	submitButton.innerHTML= "Register";
 	submitButton.removeAttribute('disabled',"true");
@@ -369,7 +392,7 @@ function onLoad(){
 	paymentSettings();
 	hideElement(colorMenu.parentNode);
 	addPElementTo(checkBoxForm);
-	disableSubmit();
+//	disableSubmit();
 	intoDiv();
 	isSubmitable();
 }
