@@ -62,6 +62,14 @@ var nameValidation = null;
  *-------------------------------------------------|
  */
 
+document.querySelector('#title').addEventListener('change', (event)=>{
+	if (event.target.value === 'other'){
+		showElement(textArea);	
+	}else{
+		hideElement(textArea);
+	}
+})
+
 nameField.addEventListener('keyup' , (event) =>{ //name field validation on every key up
 		nameValidation = false;
 		if (event.target.value == ""){
@@ -101,7 +109,7 @@ checkBoxForm.addEventListener('change', (event) =>{ //Activity checkboxes valida
 				activityValidation = true;
 			}
 		})
-		isSubmitable();
+	isSubmitable();
 	}
 )
 
@@ -234,10 +242,11 @@ designMenu.addEventListener('change', event =>{  //desgin event listener, update
 
 function isSubmitable(){ //checking if the user input is valid.
 	if (paymentOptions.value ==="credit card"){creditCardValidity()};
+	console.log(activityValidation , paymentValidity , nameValidation , emailValidation)
 	if (activityValidation && paymentValidity && nameValidation && emailValidation){
 		enableSubmit();	
 	}else{
-		disableSubmit;
+		disableSubmit();
 	}
 
 }
@@ -338,11 +347,17 @@ function textAreaHide(){
 	textArea.style.display="none";
 }
 
+
 function disableSubmit(){
+	console.log('disabling');
 	submitButton.setAttribute('disabled',"true");
+	submitButton.style.color="grey";
+	submitButton.innerHTML= "invalid";
 }
 
 function enableSubmit(){
+	submitButton.style.color="white";
+	submitButton.innerHTML= "Register";
 	submitButton.removeAttribute('disabled',"true");
 }
 
@@ -356,5 +371,6 @@ function onLoad(){
 	addPElementTo(checkBoxForm);
 	disableSubmit();
 	intoDiv();
+	isSubmitable();
 }
 onLoad();
