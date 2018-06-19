@@ -158,17 +158,17 @@ zipField.addEventListener('keyup', (event)=>{// zip number field
 cvvField.addEventListener('keyup', (event)=>{ // cvv number field
 	ccvValidation = false;
 	if (event.target.value == ""){
-		errorHandler('required', event.target, ccvValidation);	
+		errorHandler('required', event.target, zipValidation);	
 		return isSubmitable()
 	}else if(isNaN(event.target.value)){
-		errorHandler('numebrs only', event.target, ccvValidation);	
+		errorHandler('numebrs only', event.target, zipValidation);	
 		return isSubmitable()
 	}else if (event.target.value.length < 3||event.target.value.length > 3){
-		errorHandler('invalid', event.target, ccvValidation);	
+		errorHandler('invalid', event.target, zipValidation);	
 		return isSubmitable()
 	}else{
 		ccvValidation = true;
-		errorHandler('errorHandeler failed', event.target, ccvValidation);	
+		errorHandler('errorHandeler failed', event.target, zipValidation);	
 	}
 	isSubmitable();
 
@@ -295,12 +295,21 @@ function errorHandler(str, element, bool){
 		let error = document.createElement('p');
 		error.innerHTML = str;
 		error.setAttribute('class', 'error');
-		console.log(' attempting to insert error message');
 		element.parentNode.insertBefore(error, element.nextElementSibling);
 	}
 	else if(bool === true && errorElement){
 		errorElement.remove();
 	}
+}
+
+function intoDiv(){
+	let selectedLabel = document.querySelector('label[for="exp-month"]');
+        let selectedexpMonth = document.querySelector('#exp-month');
+	const div = document.createElement('div');
+	div.insertBefore(selectedexpMonth, null);
+	div.insertBefore(selectedLabel, selectedexpMonth);
+	div.style.clear ="both";
+	creditCardDiv.insertBefore(div, document.querySelector('label[for="exp-year"]'));
 }
 
 
@@ -346,5 +355,6 @@ function onLoad(){
 	hideElement(colorMenu.parentNode);
 	addPElementTo(checkBoxForm);
 	disableSubmit();
+	intoDiv();
 }
 onLoad();
